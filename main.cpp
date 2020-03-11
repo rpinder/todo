@@ -1,6 +1,10 @@
 #include <iostream>
 #include <memory>
 
+extern "C" {
+#include <ncurses.h>
+}
+
 #include "task.hpp"
 
 auto main() -> int
@@ -9,8 +13,12 @@ auto main() -> int
     std::string desc = "Do the washing";
 
     std::unique_ptr<Task> task(new Task(title, desc));
-    std::cout << task->getTitle() << std::endl << task->getDescription() << std::endl << task->isCompleted() << std::endl;
-    task->makeCompleted();
-    std::cout << task->isCompleted() << std::endl;
+
+    initscr();
+    addstr(task->getTitle().c_str());
+    refresh();
+    getch();
+    endwin();
+    
     return 0;
 }
