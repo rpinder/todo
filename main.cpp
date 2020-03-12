@@ -7,13 +7,16 @@ extern "C" {
 
 #include "task.hpp"
 #include "window.hpp"
-#include "date.hpp"
 
 auto main() -> int
 {
     std::string title = "Washing";
     std::string desc = "Do the washing";
-    auto task = std::make_unique<Task>(title, desc);
+    auto day = std::make_unique<Date>(05,11,2019);
+    auto task = std::make_unique<Task>(title, desc, std::move(day));
+
+    std::cout << task->get_title() << " " << task->get_date()->read() << " " << task->is_completed()
+              << std::endl << task->get_description() << std::endl;
 
     // initscr();
     // refresh();
@@ -30,8 +33,6 @@ auto main() -> int
     // getch();
     // endwin();
 
-    auto day = std::make_unique<Date>(05,11,2019);
-    std::cout << day->get_day() << day->get_month() << day->get_year() << std::endl << day->read() << std::endl;
 
     return 0;
 }
