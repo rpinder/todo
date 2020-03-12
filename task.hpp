@@ -9,8 +9,8 @@ private:
 public:
     Task(std::string title, std::string description);
 
-    auto getTitle() -> std::string;
-    auto getDescription() -> std::string;
-    auto isCompleted() -> bool;
-    auto makeCompleted() -> void;
+    auto get_title() -> std::string;
+    auto get_description() -> std::string;
+    auto is_completed() -> bool;
+    auto make_completed() -> void;
 };  

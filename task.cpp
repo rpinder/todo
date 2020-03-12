@@ -6,22 +6,22 @@ Task::Task(std::string title, std::string description) : title(title)
     this->completed = false;
 }
 
-auto Task::getTitle() -> std::string
+auto Task::get_title() -> std::string
 {
     return this->title;
 }
 
-auto Task::getDescription() -> std::string
+auto Task::get_description() -> std::string
 {
     return this->description;
 }
 
-auto Task::isCompleted() -> bool
+auto Task::is_completed() -> bool
 {
     return completed;
 }
 
-auto Task::makeCompleted() -> void
+auto Task::make_completed() -> void
 {
     this->completed = true;
 }

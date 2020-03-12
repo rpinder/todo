@@ -23,7 +23,7 @@ auto main() -> int
     getmaxyx(stdscr, height, width);
 
     auto mainwindow = std::unique_ptr<Window>(new Window(height, width, 0, 0));
-    mainwindow->putstr(task->getTitle(), 0, 0);
+    mainwindow->putstr(task->get_title(), 0, 0);
     mainwindow->refresh();
     
     getch();
