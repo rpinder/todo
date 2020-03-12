@@ -12,7 +12,7 @@ auto main() -> int
 {
     std::string title = "Washing";
     std::string desc = "Do the washing";
-    auto task = std::unique_ptr<Task>(new Task(title, desc));
+    auto task = std::make_unique<Task>(title, desc);
 
     initscr();
     refresh();
@@ -22,7 +22,7 @@ auto main() -> int
     int height, width;
     getmaxyx(stdscr, height, width);
 
-    auto mainwindow = std::unique_ptr<Window>(new Window(height, width, 0, 0));
+    auto mainwindow = std::make_unique<Window>(height, width, 0, 0);
     mainwindow->putstr(task->get_title(), 0, 0);
     mainwindow->refresh();
     

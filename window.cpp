@@ -3,7 +3,7 @@
 
 Window::Window(int height, int width, int y, int x)
 {
-    this->win = std::unique_ptr<NcursesWindow>(new NcursesWindow(height, width, y, x));
+    this->win = std::make_unique<NcursesWindow>(height, width, y, x);
     this->height = height;
     this->width = width;
 }
