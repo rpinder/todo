@@ -6,19 +6,27 @@ extern "C" {
 }
 
 #include "task.hpp"
+#include "window.hpp"
 
 auto main() -> int
 {
     std::string title = "Washing";
     std::string desc = "Do the washing";
-
-    std::unique_ptr<Task> task(new Task(title, desc));
+    auto task = std::unique_ptr<Task>(new Task(title, desc));
 
     initscr();
-    addstr(task->getTitle().c_str());
     refresh();
+    noecho();
+    curs_set(0);
+
+    int height, width;
+    getmaxyx(stdscr, height, width);
+
+    auto mainwindow = std::unique_ptr<Window>(new Window(height, width, 0, 0));
+    mainwindow->putstr(task->getTitle(), 0, 0);
+    mainwindow->refresh();
+    
     getch();
     endwin();
-    
     return 0;
 }
