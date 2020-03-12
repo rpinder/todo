@@ -31,7 +31,7 @@ auto main() -> int
     // endwin();
 
     auto day = std::make_unique<Date>(05,11,2019);
-    std::cout << day->getDay() << day->getMonth() << day->getYear() << std::endl << day->read() << std::endl;
+    std::cout << day->get_day() << day->get_month() << day->get_year() << std::endl << day->read() << std::endl;
 
     return 0;
 }
