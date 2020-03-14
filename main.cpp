@@ -10,6 +10,7 @@ extern "C" {
 
 #include "task.hpp"
 #include "window.hpp"
+#include "util.hpp"
 
 auto main() -> int
 {
@@ -20,29 +21,14 @@ auto main() -> int
     std::ifstream myfile (".tasks");
     if (myfile.is_open()) {
         while (getline(myfile, line)) {
-            std::istringstream iss (line);
-            std::vector<std::string> record;
-
-            while (iss) {
-                std::string s;
-                if (!getline(iss, s, '|')) break;
-                record.push_back(s);
-            }
-
-            records.push_back(record);
+            records.push_back(string_split(line, '|'));
         } 
         myfile.close();
     }
 
     for (auto r : records) {
         std::istringstream iss(r[0]);
-        std::vector<std::string> date;
-
-        while (iss) {
-            std::string s;
-            if (!getline(iss, s, '/')) break;
-            date.push_back(s);
-        }
+        std::vector<std::string> date = string_split(r[0], '/');
 
         std::vector<int> date_int;
         for (auto s : date) {
@@ -53,8 +39,9 @@ auto main() -> int
         tasks.push_back(std::make_unique<Task>(r[1], r[2], std::move(day), std::stoi(r[3])));
     }
 
-    for (auto &t : tasks) {
-        std::cout << t->get_date()->read() << " " << t->get_title() << " " << t->get_description() << " " << t->is_completed() << std::endl;
+    for (auto const &t : tasks) {
+        std::cout << t->get_date()->read() << " " << t->get_title() << " "
+                  << t->get_description() << " " << t->is_completed() << std::endl;
     }
 
     return 0;
