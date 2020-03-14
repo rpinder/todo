@@ -27,7 +27,6 @@ auto main() -> int
     }
 
     for (auto r : records) {
-        std::istringstream iss(r[0]);
         std::vector<std::string> date = string_split(r[0], '/');
 
         std::vector<int> date_int;
