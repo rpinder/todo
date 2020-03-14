@@ -11,7 +11,7 @@ private:
     std::unique_ptr<Date> day;
     std::string description;
 public:
-    Task(std::string title, std::string description, std::unique_ptr<Date> day);
+    Task(std::string title, std::string description, std::unique_ptr<Date> day, bool completed);
 
     auto get_title() -> std::string;
     auto get_description() -> std::string;

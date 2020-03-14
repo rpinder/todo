@@ -1,10 +1,12 @@
 #include <sstream>
+#include <string>
+#include <vector>
 #include "date.hpp"
 
-Date::Date(int day, int month, int year)
-    : day(day),
+Date::Date(int year, int month, int day)
+    : year(year),
       month(month),
-      year(year)
+      day(day)
 {}
 
 auto Date::get_day() -> int
