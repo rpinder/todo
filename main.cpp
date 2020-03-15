@@ -44,18 +44,29 @@ auto main() -> int
 
     int key;
     int current_item = 0;
+    int row_offset = 0;
+    int maxx, maxy;
+    getmaxyx(stdscr, maxy, maxx);
     do {
         switch (key) {
         case 'j':
-            if (current_item < (int)tasks.size()-1)
-                current_item++;
+            if (current_item < maxy && current_item + row_offset < (int)tasks.size()-1) {
+                if (current_item == maxy - 1)
+                    row_offset++;
+                else 
+                    current_item++;
+            }
             break;
         case 'k':
-            if (current_item > 0)
-                current_item--;
+            current_item--;
+            if (current_item < 0) {
+                current_item = 0;
+                if (row_offset > 0)
+                    row_offset--;
+            }
             break;
         }
-        draw_tasks(tasklist, current_item);
+        draw_tasks(tasklist, current_item, row_offset);
         refresh();
         key = getch();
     } while (key != 'q');
