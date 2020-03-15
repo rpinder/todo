@@ -22,9 +22,9 @@ auto main() -> int
         myfile.close();
     }
 
+
     for (auto r : records) {
         std::vector<std::string> date = string_split(r[0], '/');
-
         std::vector<int> date_int;
         for (auto s : date) {
             date_int.push_back(std::stoi(s));
