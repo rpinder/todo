@@ -36,7 +36,7 @@ auto main() -> int
     }
 
     std::sort(tasks.begin(), tasks.end(), [](const std::unique_ptr<Task>&a, const std::unique_ptr<Task> &b) {
-        return !compare_date(a->get_date(), b->get_date());
+        return compare_date(a->get_date(), b->get_date());
     });
 
     start_ncurses();
