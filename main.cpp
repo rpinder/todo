@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 #include <sstream>
+#include <algorithm>
 
 #include "window.hpp"
 #include "util.hpp"
@@ -33,6 +34,10 @@ auto main() -> int
         auto day = std::make_unique<Date>(date_int[0], date_int[1], date_int[2]);
         tasks.push_back(std::make_unique<Task>(r[1], r[2], std::move(day), std::stoi(r[3])));
     }
+
+    std::sort(tasks.begin(), tasks.end(), [](const std::unique_ptr<Task>&a, const std::unique_ptr<Task> &b) {
+        return !compare_date(a->get_date(), b->get_date());
+    });
 
     start_ncurses();
     auto& tasklist = tasks;

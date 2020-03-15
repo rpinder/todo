@@ -33,3 +33,22 @@ auto Date::read() -> std::string
        << std::setfill('0') << std::setw(2) << std::right << std::to_string(this->get_day());
     return ss.str();
 }
+
+auto compare_date(const std::unique_ptr<Date> &a, const std::unique_ptr<Date> &b) -> bool {
+  if (a->get_year() < b->get_year())
+    return true;
+  if (a->get_year() > b->get_year())
+    return false;
+
+  if (a->get_month() < b->get_month())
+    return true;
+  if (a->get_month() > b->get_month())
+    return false;
+
+  if (a->get_day() < b->get_day())
+    return true;
+  if (a->get_day() > b->get_day())
+    return false;
+
+  return false;
+}
