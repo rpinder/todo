@@ -1,3 +1,6 @@
+#ifndef TASK_H
+#define TASK_H
+
 #include <string>
 #include <memory>
 
@@ -19,3 +22,5 @@ public:
     auto make_completed() -> void;
     auto get_date() -> std::unique_ptr<Date>&;
 };  
+
+#endif

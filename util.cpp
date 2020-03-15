@@ -1,4 +1,7 @@
 #include <sstream>
+extern "C" {
+#include <ncurses.h>
+}
 
 #include "util.hpp"
 
@@ -14,4 +17,20 @@ auto string_split(std::string total, char delim) -> std::vector<std::string>
     }
 
     return components;
+}
+
+auto start_ncurses() -> void
+{
+    initscr();
+    refresh();
+    noecho();
+    curs_set(0);
+}
+
+auto draw_tasks(std::vector<std::unique_ptr<Task>>& tasks) -> void
+{
+    int max = getmaxy(stdscr);
+    for (int y = 0; y < max && y < tasks.size(); y++) {
+        mvwaddstr(stdscr, y, 0, tasks[y]->get_title().c_str());
+    }
 }

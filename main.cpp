@@ -4,13 +4,9 @@
 #include <vector>
 #include <sstream>
 
-extern "C" {
-#include <ncurses.h>
-}
-
-#include "task.hpp"
 #include "window.hpp"
 #include "util.hpp"
+#include "task.hpp"
 
 auto main() -> int
 {
@@ -38,10 +34,17 @@ auto main() -> int
         tasks.push_back(std::make_unique<Task>(r[1], r[2], std::move(day), std::stoi(r[3])));
     }
 
-    for (auto const &t : tasks) {
-        std::cout << t->get_date()->read() << " " << t->get_title() << " "
-                  << t->get_description() << " " << t->is_completed() << std::endl;
-    }
+    start_ncurses();
+    auto& tasklist = tasks;
+
+    int key;
+    do {
+         draw_tasks(tasklist);
+        refresh();
+        key = getch();
+    } while (key != 'q');
+
+    endwin();
 
     return 0;
 }

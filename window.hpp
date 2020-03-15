@@ -1,3 +1,6 @@
+#ifndef WINDOW_H
+#define WINDOW_H
+
 #include <memory>
 #include "ncurses_window.hpp"
 extern "C" {
@@ -18,3 +21,5 @@ public:
     auto refresh() -> void;
     auto putstr(std::string text, int y, int x) -> void;
 };
+
+#endif

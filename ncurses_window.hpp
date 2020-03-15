@@ -1,3 +1,6 @@
+#ifndef NCURSES_WINDOW_H
+#define NCURSES_WINDOW_H
+
 extern "C" {
 #include <ncurses.h>
 }
@@ -11,3 +14,5 @@ public:
     ~NcursesWindow();
     WINDOW *get();
 }; 
+
+#endif
