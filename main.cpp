@@ -38,8 +38,19 @@ auto main() -> int
     auto& tasklist = tasks;
 
     int key;
+    int current_item = 0;
     do {
-         draw_tasks(tasklist);
+        switch (key) {
+        case 'j':
+            if (current_item < (int)tasks.size()-1)
+                current_item++;
+            break;
+        case 'k':
+            if (current_item > 0)
+                current_item--;
+            break;
+        }
+        draw_tasks(tasklist, current_item);
         refresh();
         key = getch();
     } while (key != 'q');
