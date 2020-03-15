@@ -1,4 +1,5 @@
 #include <sstream>
+#include <iomanip>
 extern "C" {
 #include <ncurses.h>
 }
@@ -31,6 +32,11 @@ auto draw_tasks(std::vector<std::unique_ptr<Task>>& tasks) -> void
 {
     int max = getmaxy(stdscr);
     for (int y = 0; y < max && y < tasks.size(); y++) {
-        mvwaddstr(stdscr, y, 0, tasks[y]->get_title().c_str());
+        std::ostringstream oss;
+        oss << std::setw(10) << std::left << tasks[y]->get_date()->read() << " | "
+            << std::setw(15) << std::left << tasks[y]->get_title() << " | "
+            << std::setw(30) << std::left << tasks[y]->get_description() << " | "
+            << tasks[y]->is_completed();
+        mvwaddstr(stdscr, y, 0, oss.str().c_str());
     }
 }
