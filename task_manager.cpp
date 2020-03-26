@@ -65,6 +65,11 @@ auto TaskManager::loop() -> void
                     row_offset--;
             }
             break;
+        case KEY_RESIZE:
+            Window::stop_ncurses();
+            Window::start_ncurses();
+            mainwindow->resize(Window::terminal_height(), Window::terminal_width(), 0, 0);
+            mainwindow->refresh();
         }
         draw_tasks(current_item, row_offset, mainwindow);
         mainwindow->refresh();
