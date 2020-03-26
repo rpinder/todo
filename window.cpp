@@ -1,5 +1,6 @@
 #include "window.hpp"
 #include <memory>
+#include <iostream>
 
 extern "C" {
     #include <ncurses.h>
@@ -8,8 +9,6 @@ extern "C" {
 Window::Window(int height, int width, int y, int x)
 {
     this->win = std::make_unique<NcursesWindow>(height, width, y, x);
-    this->height = height;
-    this->width = width;
 }
 
 auto Window::resize(int height, int width, int y, int x) -> void
@@ -19,12 +18,12 @@ auto Window::resize(int height, int width, int y, int x) -> void
 
 auto Window::refresh() -> void
 {
-    wrefresh(this->win.get()->get());
+    wrefresh(this->win->get());
 }
 
 auto Window::putstr(std::string text, int y, int x) -> void
 {
-    mvwaddstr(this->win.get()->get(), y, x, text.c_str()); 
+    mvwaddstr(this->win->get(), y, x, text.c_str()); 
 }
 
 auto Window::start_ncurses() -> void
@@ -58,4 +57,17 @@ auto Window::window_height() -> int
 auto Window::window_width() -> int
 {
     return getmaxx(this->win->get());
+}
+
+auto Window::reverse(bool b) -> void
+{
+    if (b)
+        wattron(win->get(), A_REVERSE);
+    else
+        wattroff(win->get(), A_REVERSE);
+}
+
+auto Window::get() -> std::unique_ptr<NcursesWindow>&
+{
+    return win;
 }

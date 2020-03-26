@@ -12,12 +12,13 @@
 
 auto main() -> int
 {
+    Window::start_ncurses();
+
     TaskManager task;
     task.read_file(".tasks");
     task.create_tasks();
-    
-    Window::start_ncurses();
     task.loop();
+
     Window::stop_ncurses();
 
     return 0;

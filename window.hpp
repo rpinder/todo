@@ -10,8 +10,6 @@ extern "C" {
 class Window
 {
 private:
-    int height;
-    int width;
     std::unique_ptr<NcursesWindow> win;
 
 public:
@@ -28,7 +26,9 @@ public:
     auto putstr(std::string text, int y, int x) -> void;
     auto window_width() -> int;
     auto window_height() -> int;
+    auto reverse(bool b) -> void;
 
+    auto get() -> std::unique_ptr<NcursesWindow>&;
 };
 
 #endif

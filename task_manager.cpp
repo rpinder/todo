@@ -2,7 +2,7 @@
 
 TaskManager::TaskManager()
 {
-    mainwindow = std::make_unique<Window>(Window::terminal_height(), Window::terminal_width(), 0, 0); 
+    this->mainwindow = std::make_unique<Window>(Window::terminal_height(), Window::terminal_width(), 0, 0); 
 }
 
 auto TaskManager::read_file(std::string name) -> void
@@ -66,26 +66,26 @@ auto TaskManager::loop() -> void
             }
             break;
         }
-        draw_tasks(current_item, row_offset);
-        refresh();
+        draw_tasks(current_item, row_offset, mainwindow);
+        mainwindow->refresh();
         key = getch();
     } while (key != 'q');
 
 
 }
 
-auto TaskManager::draw_tasks(int current_item, int row_offset) -> void
-{
-    for (int y = 0; y < Window::terminal_height() && y < (int)tasks.size(); y++) {
-        std::ostringstream oss;
-        oss << std::setw(11) << std::right << tasks[y + row_offset]->get_date()->read() << " | "
-            << std::setw(15) << std::left << max_length(tasks[y + row_offset]->get_title(), 15) << " | "
-            << std::setw(30) << std::left << max_length(tasks[y + row_offset]->get_description(), 30) << " | "
-            << tasks[y + row_offset]->is_completed();
-        if (y == current_item)
-            wattron(stdscr, A_REVERSE);
-        mvwaddstr(stdscr, y, 0, oss.str().c_str());
-        wattroff(stdscr, A_REVERSE);
-    }
+auto TaskManager::draw_tasks(int current_item, int row_offset, std::unique_ptr<Window>& window) -> void {
+  for (int y = 0; y < this->mainwindow->window_height() && y < (int)tasks.size(); y++) {
+    std::ostringstream oss;
+    oss << std::setw(11) << std::right
+        << tasks[y + row_offset]->get_date()->read() << " | " << std::setw(15)
+        << std::left << max_length(tasks[y + row_offset]->get_title(), 15)
+        << " | " << std::setw(30) << std::left
+        << max_length(tasks[y + row_offset]->get_description(), 30) << " | "
+        << tasks[y + row_offset]->is_completed();
+    if (y == current_item)
+      window->reverse(true);
+    window->putstr(oss.str(), y, 0);
+    window->reverse(false);
+  }
 }
-
