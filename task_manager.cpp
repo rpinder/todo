@@ -1,4 +1,5 @@
 #include "task_manager.hpp"
+#include <math.h>
 
 TaskManager::TaskManager()
 {
@@ -80,13 +81,16 @@ auto TaskManager::loop() -> void
 }
 
 auto TaskManager::draw_tasks(int current_item, int row_offset, std::unique_ptr<Window>& window) -> void {
-  for (int y = 0; y < this->mainwindow->window_height() && y < (int)tasks.size(); y++) {
+  for (int y = 0; y < mainwindow->window_height() && y < (int)tasks.size(); y++) {
+      int width = mainwindow->window_width() - 21;
+      int title_width = floor(width / 3);
+      int desc_width = ceil(2 * width / 3);
     std::ostringstream oss;
     oss << std::setw(11) << std::right
-        << tasks[y + row_offset]->get_date()->read() << " | " << std::setw(15)
-        << std::left << max_length(tasks[y + row_offset]->get_title(), 15)
-        << " | " << std::setw(30) << std::left
-        << max_length(tasks[y + row_offset]->get_description(), 30) << " | "
+        << tasks[y + row_offset]->get_date()->read() << " | " << std::setw(title_width)
+        << std::left << max_length(tasks[y + row_offset]->get_title(), title_width)
+        << " | " << std::setw(desc_width) << std::left
+        << max_length(tasks[y + row_offset]->get_description(), desc_width) << " | "
         << tasks[y + row_offset]->is_completed();
     if (y == current_item)
       window->reverse(true);
