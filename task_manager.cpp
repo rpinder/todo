@@ -1,11 +1,8 @@
 #include "task_manager.hpp"
 #include <math.h>
+#include <numeric>
 
-TaskManager::TaskManager()
-{
-    this->mainwindow = std::make_unique<Window>(Window::terminal_height(),
-                                                Window::terminal_width(), 0, 0);
-}
+TaskManager::TaskManager() {}
 
 auto TaskManager::read_file(std::string name) -> void
 {
@@ -59,8 +56,10 @@ auto TaskManager::sort_tasks() -> void
 
 auto TaskManager::loop() -> void
 {
-    auto mainwindow = std::make_unique<Window>(Window::terminal_height(),
+    auto mainwindow = std::make_unique<Window>(Window::terminal_height() - 1,
                                                Window::terminal_width(), 0, 0);
+    auto statusbar = std::make_unique<Window>(1, Window::terminal_width(),
+                                              Window::terminal_height() - 1, 0);
 
     int key = 0;
     int current_item = 0;
@@ -103,14 +102,23 @@ auto TaskManager::loop() -> void
         case KEY_RESIZE:
             Window::stop_ncurses();
             Window::start_ncurses();
-            mainwindow->resize(Window::terminal_height(),
+            mainwindow->resize(Window::terminal_height() - 1,
                                Window::terminal_width(), 0, 0);
             mainwindow->refresh();
+            if (current_item >= mainwindow->window_height())
+                current_item = mainwindow->window_height() - 1;
+
+            statusbar->resize(1, Window::terminal_width(),
+                              Window::terminal_height() - 1, 0);
+            statusbar->refresh();
+            break;
         default:
             break;
         }
         draw_tasks(current_item, row_offset, mainwindow);
         mainwindow->refresh();
+        draw_statusbar(statusbar);
+        statusbar->refresh();
         key = getch();
     } while (key != 'q');
 }
@@ -118,10 +126,11 @@ auto TaskManager::loop() -> void
 auto TaskManager::draw_tasks(int current_item, int row_offset,
                              std::unique_ptr<Window> &window) -> void
 {
-    int width = mainwindow->window_width() - 22;
-    int title_width = int(floor(width / 3));
-    int desc_width = int(ceil(2 * width / 3));
-    for (int y = 0; y < mainwindow->window_height() && y < (int)tasks.size();
+    int width = window->window_width() - 22;
+    int title_width = static_cast<int>(floor(width / 3));
+    int desc_width = static_cast<int>(ceil(2 * width / 3));
+    for (int y = 0;
+         y < window->window_height() && y < static_cast<int>(tasks.size());
          y++) {
         std::ostringstream oss;
         oss << std::setw(11) << std::right
@@ -136,4 +145,32 @@ auto TaskManager::draw_tasks(int current_item, int row_offset,
         window->putstr(oss.str(), y, 0);
         window->reverse(false);
     }
+}
+
+auto TaskManager::draw_statusbar(std::unique_ptr<Window> &window) -> void
+{
+    window->reverse(true);
+    std::ostringstream tasks_completed;
+    tasks_completed << " Tasks: " << num_completed() << "/" << tasks.size();
+
+    std::ostringstream oss;
+    oss << tasks_completed.str()
+        << std::setw(window->window_width() -
+                     static_cast<int>(tasks_completed.str().size()) - 2)
+        << std::right
+        << static_cast<int>(100 * num_completed() /
+                            static_cast<double>(tasks.size()))
+        << "% ";
+    window->putstr(oss.str(), 0, 0);
+
+    window->reverse(false);
+}
+
+auto TaskManager::num_completed() -> int
+{
+    return std::accumulate(
+        tasks.begin(), tasks.end(), 0,
+        [](const int &total, const std::unique_ptr<Task> &t) {
+            return total + t->is_completed();
+        });
 }
