@@ -7,12 +7,13 @@ extern "C" {
 
 class NcursesWindow
 {
-private:
+  private:
     WINDOW *win;
-public:
+
+  public:
     NcursesWindow(int height, int width, int y, int x);
     ~NcursesWindow();
     WINDOW *get();
-}; 
+};
 
 #endif

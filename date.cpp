@@ -1,14 +1,10 @@
+#include "date.hpp"
 #include <iomanip>
 #include <sstream>
 #include <string>
 #include <vector>
-#include "date.hpp"
 
-Date::Date(int year, int month, int day)
-    : year(year),
-      month(month),
-      day(day)
-{}
+Date::Date(int year, int month, int day) : year(year), month(month), day(day) {}
 
 auto Date::get_day() -> int
 {
@@ -28,27 +24,30 @@ auto Date::get_year() -> int
 auto Date::read() -> std::string
 {
     std::ostringstream ss;
-    ss << this->get_year() << "/"
-       << std::setfill('0') << std::setw(2) << std::right << std::to_string(this->get_month()) << "/" 
-       << std::setfill('0') << std::setw(2) << std::right << std::to_string(this->get_day());
+    ss << this->get_year() << "/" << std::setfill('0') << std::setw(2)
+       << std::right << std::to_string(this->get_month()) << "/"
+       << std::setfill('0') << std::setw(2) << std::right
+       << std::to_string(this->get_day());
     return ss.str();
 }
 
-auto compare_date(const std::unique_ptr<Date> &a, const std::unique_ptr<Date> &b) -> bool {
-  if (a->get_year() < b->get_year())
-    return true;
-  if (a->get_year() > b->get_year())
-    return false;
+auto compare_date(const std::unique_ptr<Date> &a,
+                  const std::unique_ptr<Date> &b) -> bool
+{
+    if (a->get_year() < b->get_year())
+        return true;
+    if (a->get_year() > b->get_year())
+        return false;
 
-  if (a->get_month() < b->get_month())
-    return true;
-  if (a->get_month() > b->get_month())
-    return false;
+    if (a->get_month() < b->get_month())
+        return true;
+    if (a->get_month() > b->get_month())
+        return false;
 
-  if (a->get_day() < b->get_day())
-    return true;
-  if (a->get_day() > b->get_day())
-    return false;
+    if (a->get_day() < b->get_day())
+        return true;
+    if (a->get_day() > b->get_day())
+        return false;
 
-  return false;
+    return false;
 }

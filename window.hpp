@@ -1,18 +1,18 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <memory>
 #include "ncurses_window.hpp"
+#include <memory>
 extern "C" {
 #include <ncurses.h>
 }
 
 class Window
 {
-private:
+  private:
     std::unique_ptr<NcursesWindow> win;
 
-public:
+  public:
     Window(int height, int width, int y, int x);
 
     auto static start_ncurses() -> void;
@@ -28,7 +28,7 @@ public:
     auto window_height() -> int;
     auto reverse(bool b) -> void;
 
-    auto get() -> std::unique_ptr<NcursesWindow>&;
+    auto get() -> std::unique_ptr<NcursesWindow> &;
 };
 
 #endif

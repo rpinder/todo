@@ -1,9 +1,9 @@
 #include "window.hpp"
-#include <memory>
 #include <iostream>
+#include <memory>
 
 extern "C" {
-    #include <ncurses.h>
+#include <ncurses.h>
 }
 
 Window::Window(int height, int width, int y, int x)
@@ -23,7 +23,7 @@ auto Window::refresh() -> void
 
 auto Window::putstr(std::string text, int y, int x) -> void
 {
-    mvwaddstr(this->win->get(), y, x, text.c_str()); 
+    mvwaddstr(this->win->get(), y, x, text.c_str());
 }
 
 auto Window::start_ncurses() -> void
@@ -67,7 +67,7 @@ auto Window::reverse(bool b) -> void
         wattroff(win->get(), A_REVERSE);
 }
 
-auto Window::get() -> std::unique_ptr<NcursesWindow>&
+auto Window::get() -> std::unique_ptr<NcursesWindow> &
 {
     return win;
 }

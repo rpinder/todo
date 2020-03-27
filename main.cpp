@@ -1,14 +1,14 @@
-#include <iostream>
-#include <fstream>
-#include <memory>
-#include <vector>
-#include <sstream>
 #include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <sstream>
+#include <vector>
 
-#include "window.hpp"
-#include "util.hpp"
 #include "task.hpp"
 #include "task_manager.hpp"
+#include "util.hpp"
+#include "window.hpp"
 
 auto main() -> int
 {

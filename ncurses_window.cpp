@@ -10,11 +10,6 @@ NcursesWindow::~NcursesWindow()
     delwin(this->win);
 }
 
-// NcursesWindow::operator WINDOW*()
-// {
-//     return win;
-// }
-
 auto NcursesWindow::get() -> WINDOW *
 {
     return win;
