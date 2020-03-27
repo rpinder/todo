@@ -35,13 +35,13 @@ auto max_length(std::string str, int max) -> std::string
 
 auto word_wrap(std::string str, int width) -> std::vector<std::string>
 {
-    int col;
+    int col = 0;
     for (int i = 0; i < str.length(); i++, col++) {
         if (col >= width) {
             int j;
             for (j = i; str[j] != ' '; j--);
             str[j] = '\n';
-            col = 0;
+            col = i - j;
         }
     }
     

@@ -188,12 +188,13 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
 
 auto TaskManager::draw_task(Window &window, std::unique_ptr<Task>& task) -> void
 {
-    window.putstr(task->get_title(), 0, 0);
-    window.putstr(task->is_completed() ? "Completed" : "Not Completed", 2, 0);
-    window.putstr(task->get_date()->read(), 4, 0);
-    int y = 6;
-    for (auto l : word_wrap(task->get_description(), window.window_width())) {
-        window.putstr(l, y, 0);
+    window.putstr(task->get_title(), 0, 1);
+    window.putstr(std::string(task->get_title().size(), '-'), 1, 1);
+    window.putstr(task->is_completed() ? "Completed" : "Not Completed", 3, 1);
+    window.putstr(task->get_date()->read(), 5, 1);
+    int y = 7;
+    for (auto l : word_wrap(task->get_description(), window.window_width() - 2)) {
+        window.putstr(l, y, 1);
         y++;
     }
     
