@@ -20,7 +20,7 @@ auto main() -> int
     task.loop();
 
     Window::stop_ncurses();
-    //task.write_file(".tasks");
+    // task.write_file(".tasks");
 
     return 0;
 }

@@ -24,15 +24,13 @@ auto Date::get_year() -> int
 auto Date::read() -> std::string
 {
     std::ostringstream ss;
-    ss << this->get_year() << "/" << std::setfill('0') << std::setw(2)
-       << std::right << std::to_string(this->get_month()) << "/"
-       << std::setfill('0') << std::setw(2) << std::right
-       << std::to_string(this->get_day());
+    ss << this->get_year() << "/" << std::setfill('0') << std::setw(2) << std::right
+       << std::to_string(this->get_month()) << "/" << std::setfill('0') << std::setw(2)
+       << std::right << std::to_string(this->get_day());
     return ss.str();
 }
 
-auto compare_date(const std::unique_ptr<Date> &a,
-                  const std::unique_ptr<Date> &b) -> bool
+auto compare_date(const std::unique_ptr<Date> &a, const std::unique_ptr<Date> &b) -> bool
 {
     if (a->get_year() < b->get_year())
         return true;

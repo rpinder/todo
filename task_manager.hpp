@@ -21,8 +21,7 @@ class TaskManager
     auto write_file(std::string name) -> void;
     auto create_tasks() -> void;
     auto loop() -> void;
-    auto draw_tasks(int current_item, int row_offset,
-                    std::unique_ptr<Window> &window) -> void;
+    auto draw_tasks(int current_item, int row_offset, std::unique_ptr<Window> &window) -> void;
     auto draw_statusbar(std::unique_ptr<Window> &window) -> void;
     auto num_completed() -> int;
 
