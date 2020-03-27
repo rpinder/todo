@@ -27,6 +27,8 @@ class Window
     auto window_width() -> int;
     auto window_height() -> int;
     auto reverse(bool b) -> void;
+    auto touch() -> void;
+    auto erase() -> void;
 
     auto get() -> std::unique_ptr<NcursesWindow> &;
 };

@@ -87,12 +87,24 @@ auto TaskManager::loop() -> void
         case 'm':
             tasks[current_item + row_offset]->toggle_completed();
             break;
+        case 'd':
+            tasks.erase(tasks.begin() + current_item + row_offset);
+            if (current_item > 0) {
+                current_item--;
+            } else {
+                if (row_offset > 0)
+                    row_offset--;
+            }
+            mainwindow->erase();
+            break;
         case KEY_RESIZE:
             Window::stop_ncurses();
             Window::start_ncurses();
             mainwindow->resize(Window::terminal_height(),
                                Window::terminal_width(), 0, 0);
             mainwindow->refresh();
+        default:
+            break;
         }
         draw_tasks(current_item, row_offset, mainwindow);
         mainwindow->refresh();

@@ -71,3 +71,13 @@ auto Window::get() -> std::unique_ptr<NcursesWindow> &
 {
     return win;
 }
+
+auto Window::touch() -> void
+{
+    touchwin(win->get());
+}
+
+auto Window::erase() -> void
+{
+    werase(win->get());
+}
