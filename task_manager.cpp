@@ -19,6 +19,17 @@ auto TaskManager::read_file(std::string name) -> void
     }
 }
 
+auto TaskManager::write_file(std::string name) -> void
+{
+    std::ofstream myfile;
+    myfile.open(name);
+    for (auto &t : tasks) {
+        myfile << t->get_date()->read() << "|" << t->get_title() << "|"
+               << t->get_description() << "|" << t->is_completed() << "\n";
+    }
+    myfile.close();
+}
+
 auto TaskManager::create_tasks() -> void
 {
     for (auto r : records) {
