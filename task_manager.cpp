@@ -143,7 +143,7 @@ auto TaskManager::draw_statusbar(std::unique_ptr<Window> &window) -> void
 {
     window->reverse(true);
     std::ostringstream tasks_completed;
-    tasks_completed << " Tasks: " << num_completed() << "/" << tasks.size();
+    tasks_completed << " Tasks Completed: " << num_completed() << "/" << tasks.size();
 
     std::ostringstream oss;
     oss << tasks_completed.str()
