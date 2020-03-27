@@ -73,6 +73,9 @@ auto TaskManager::loop() -> void
                     row_offset--;
             }
             break;
+        case 'm':
+            tasks[current_item + row_offset]->toggle_completed();
+            break;
         case KEY_RESIZE:
             Window::stop_ncurses();
             Window::start_ncurses();

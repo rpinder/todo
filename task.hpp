@@ -22,6 +22,7 @@ class Task
     auto get_description() -> std::string;
     auto is_completed() -> bool;
     auto make_completed() -> void;
+    auto toggle_completed() -> void;
     auto get_date() -> std::unique_ptr<Date> &;
 };
 

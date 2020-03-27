@@ -28,6 +28,11 @@ auto Task::make_completed() -> void
     this->completed = true;
 }
 
+auto Task::toggle_completed() -> void
+{
+    this->completed = !this->completed;
+}
+
 auto Task::get_date() -> std::unique_ptr<Date> &
 {
     return day;
