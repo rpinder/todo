@@ -96,6 +96,9 @@ auto TaskManager::loop() -> void
                 mainwindow->erase();
             }
             break;
+        case 'o':
+            view_task(tasks[current_item + row_offset]);
+            break;
         case KEY_RESIZE:
             Window::stop_ncurses();
             Window::start_ncurses();
@@ -160,4 +163,40 @@ auto TaskManager::num_completed() -> int
     return std::accumulate(
         tasks.begin(), tasks.end(), 0,
         [](const int &total, const std::unique_ptr<Task> &t) { return total + t->is_completed(); });
+}
+
+auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
+{
+    Window window(Window::terminal_height() - 1, Window::terminal_width(), 0, 0);
+
+    int key = 0;
+    do {
+        switch (key) {
+        case KEY_RESIZE:
+            Window::stop_ncurses();
+            Window::start_ncurses();
+            window.resize(Window::terminal_height() - 1, Window::terminal_width(), 0, 0);
+            window.refresh();
+            break;
+        default:
+            break;
+        }
+        draw_task(window, task);
+        key = getch();
+    } while (key != 'q');
+}
+
+auto TaskManager::draw_task(Window &window, std::unique_ptr<Task>& task) -> void
+{
+    window.putstr(task->get_title(), 0, 0);
+    window.putstr(task->is_completed() ? "Completed" : "Not Completed", 2, 0);
+    window.putstr(task->get_date()->read(), 4, 0);
+    int y = 6;
+    for (auto l : word_wrap(task->get_description(), window.window_width())) {
+        window.putstr(l, y, 0);
+        y++;
+    }
+    
+    window.refresh();
+    
 }

@@ -32,3 +32,20 @@ auto max_length(std::string str, int max) -> std::string
     }
     return str;
 }
+
+auto word_wrap(std::string str, int width) -> std::vector<std::string>
+{
+    int col;
+    for (int i = 0; i < str.length(); i++, col++) {
+        if (col >= width) {
+            int j;
+            for (j = i; str[j] != ' '; j--);
+            str[j] = '\n';
+            col = 0;
+        }
+    }
+    
+    std::vector<std::string> lines = string_split(str, '\n'); 
+
+    return lines;
+}
