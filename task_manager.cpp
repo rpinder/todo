@@ -134,7 +134,7 @@ auto TaskManager::draw_tasks(int current_item, int row_offset, std::unique_ptr<W
             << max_length(tasks[y + row_offset]->get_title(), title_width) << " | "
             << std::setw(desc_width) << std::left
             << max_length(tasks[y + row_offset]->get_description(), desc_width) << " | "
-            << tasks[y + row_offset]->is_completed() << " ";
+            << (tasks[y + row_offset]->is_completed() ? "/" : "x") << " ";
         if (y == current_item)
             window->reverse(true);
         window->putstr(oss.str(), y, 0);
