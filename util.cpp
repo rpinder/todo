@@ -23,7 +23,7 @@ auto string_split(std::string total, char delim) -> std::vector<std::string>
 
 auto max_length(std::string str, int max) -> std::string
 {
-    if ((int)str.length() > max) {
+    if (static_cast<int>(str.length()) > max) {
         str = str.substr(0, max);
         str.pop_back();
         str.pop_back();
@@ -36,16 +36,17 @@ auto max_length(std::string str, int max) -> std::string
 auto word_wrap(std::string str, int width) -> std::vector<std::string>
 {
     int col = 0;
-    for (int i = 0; i < str.length(); i++, col++) {
+    for (int i = 0; i < static_cast<int>(str.length()); i++, col++) {
         if (col >= width) {
             int j;
-            for (j = i; str[j] != ' '; j--);
+            for (j = i; str[j] != ' '; j--)
+                ;
             str[j] = '\n';
             col = i - j;
         }
     }
-    
-    std::vector<std::string> lines = string_split(str, '\n'); 
+
+    std::vector<std::string> lines = string_split(str, '\n');
 
     return lines;
 }

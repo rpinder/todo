@@ -186,7 +186,7 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
     } while (key != 'q');
 }
 
-auto TaskManager::draw_task(Window &window, std::unique_ptr<Task>& task) -> void
+auto TaskManager::draw_task(Window &window, std::unique_ptr<Task> &task) -> void
 {
     window.putstr(task->get_title(), 0, 1);
     window.putstr(std::string(task->get_title().size(), '-'), 1, 1);
@@ -197,7 +197,6 @@ auto TaskManager::draw_task(Window &window, std::unique_ptr<Task>& task) -> void
         window.putstr(l, y, 1);
         y++;
     }
-    
+
     window.refresh();
-    
 }
