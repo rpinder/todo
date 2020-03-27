@@ -83,8 +83,8 @@ auto TaskManager::loop() -> void
 auto TaskManager::draw_tasks(int current_item, int row_offset, std::unique_ptr<Window>& window) -> void {
   for (int y = 0; y < mainwindow->window_height() && y < (int)tasks.size(); y++) {
       int width = mainwindow->window_width() - 22;
-      int title_width = floor(width / 3);
-      int desc_width = ceil(2 * width / 3);
+      int title_width = int(floor(width / 3));
+      int desc_width = int(ceil(2 * width / 3));
     std::ostringstream oss;
     oss << std::setw(11) << std::right
         << tasks[y + row_offset]->get_date()->read() << " | " << std::setw(title_width)
