@@ -197,7 +197,7 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
                     }
                     break;
                 case 4:
-                    if (task->title.length() > 0) {
+                    if (task->description.length() > 0) {
                         task->description.pop_back();
                         window.erase();
                     }
