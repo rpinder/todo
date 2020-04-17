@@ -213,6 +213,7 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
                     break;
                 case 4:
                     task->description += static_cast<char>(key);
+                    window.erase();
                     break;
                 }
             } else {

@@ -40,7 +40,10 @@ auto word_wrap(std::string str, int width) -> std::vector<std::string>
         if (col >= width) {
             int j;
             for (j = i; str[j] != ' '; j--)
-                ;
+                if (j == 0) {
+                    j = width-1;
+                    break;
+                }
             str[j] = '\n';
             col = i - j;
         }
