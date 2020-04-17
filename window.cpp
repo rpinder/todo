@@ -9,6 +9,7 @@ extern "C" {
 Window::Window(int height, int width, int y, int x)
 {
     this->win = std::make_unique<NcursesWindow>(height, width, y, x);
+    keypad(this->win->get(), 1);
 }
 
 auto Window::resize(int height, int width, int y, int x) -> void

@@ -9,14 +9,14 @@
 class Task
 {
   private:
-    const std::string title;
     bool completed;
     std::unique_ptr<Date> day;
-    std::string description;
 
   public:
     Task(std::string title, std::string description, std::unique_ptr<Date> day, bool completed);
 
+    std::string title;
+    std::string description;
     auto get_title() -> std::string;
     auto get_description() -> std::string;
     auto is_completed() -> bool;

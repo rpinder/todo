@@ -1,10 +1,11 @@
 #include "task.hpp"
 
 Task::Task(std::string title, std::string description, std::unique_ptr<Date> day, bool completed)
-    : title(title), day(std::move(day))
+    : day(std::move(day))
 {
     this->description = description;
     this->completed = completed;
+    this->title = title;
 }
 
 auto Task::get_title() -> std::string
