@@ -245,6 +245,7 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
         } else {
             window.putstr("               ", window.window_height() - 1, 1);
         }
+        window.erase();
         draw_task(window, task, selection);
         key = getch();
     } while (key != 'q' || (key == 'q' && edit));
@@ -252,37 +253,45 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
 
 auto TaskManager::draw_task(Window &window, std::unique_ptr<Task> &task, int selection) -> void
 {
+    int y = 0;
     if (selection == 1)
         window.reverse(true);
     if (task->get_title().size() > 0) {
-        window.putstr(task->get_title(), 0, 1);
+        for (auto l : word_wrap(task->get_title(), window.window_width() - 2)) {
+            window.putstr(l, y, 1);
+            y++;
+        }
     } else {
         window.putstr(" ", 0, 1);
+        y++;
     }
     window.reverse(false);
 
-    window.putstr(std::string(std::max(static_cast<int>(task->get_title().size()), 3), '-'), 1, 1);
+    window.putstr(std::string(window.window_width(), '-'), y, 0);
+
+    y += 2;
 
     if (selection == 2)
         window.reverse(true);
-    window.putstr(task->is_completed() ? "Completed" : "Not Completed", 3, 1);
+    window.putstr(task->is_completed() ? "Completed" : "Not Completed", y, 1);
     window.reverse(false);
 
     if (selection == 3)
         window.reverse(true);
-    window.putstr(task->get_date()->read(), 5, 1);
+    window.putstr(task->get_date()->read(), ++++y, 1);
     window.reverse(false);
+
+    y += 2;
 
     if (selection == 4)
         window.reverse(true);
     if (task->get_description().size() > 0) {
-        int y = 7;
         for (auto l : word_wrap(task->get_description(), window.window_width() - 2)) {
             window.putstr(l, y, 1);
             y++;
         }
     } else {
-        window.putstr(" ", 7, 1);
+        window.putstr(" ", y, 1);
     }
     window.reverse(false);
 
