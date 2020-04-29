@@ -41,10 +41,10 @@ auto word_wrap(std::string str, int width) -> std::vector<std::string>
             int j;
             for (j = i; str[j] != ' '; j--)
                 if (j == 0) {
-                    j = width-1;
+                    j = width;
                     break;
                 }
-            str[j] = '\n';
+            str.insert(j, "\n");
             col = i - j;
         }
     }
