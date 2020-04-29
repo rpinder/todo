@@ -206,7 +206,7 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
             }
             break;
         default:
-            if ((isdigit(key) || isalpha(key)) && edit) {
+            if ((isdigit(key) || isalpha(key) || ispunct(key) || key == ' ') && edit) {
                 switch (selection) {
                 case 1:
                     task->title += static_cast<char>(key);
@@ -232,7 +232,7 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
                     edit = true;
                     break;
                 case 'm':
-                    if (selection == 2) {
+                    if (!edit) {
                         task->toggle_completed();
                         window.erase();
                     }
