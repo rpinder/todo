@@ -172,6 +172,7 @@ auto TaskManager::num_completed() -> int
 auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
 {
     Window window(Window::terminal_height() - 1, Window::terminal_width(), 0, 0);
+    Window statusbar(1, Window::terminal_width(), Window::terminal_height() - 1, 0);
 
     int key = 0;
     int selection = 1;
@@ -183,6 +184,8 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
             Window::start_ncurses();
             window.resize(Window::terminal_height() - 1, Window::terminal_width(), 0, 0);
             window.refresh();
+            statusbar.resize(1, Window::terminal_width(), Window::terminal_height() - 1, 0);
+            statusbar.refresh();
             break;
         case 27:
             edit = false;
@@ -240,12 +243,13 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
                 }
             }
         }
-        if (edit) {
-            window.putstr("-- EDIT MODE --", window.window_height() - 1, 1);
-        } else {
-            window.putstr("               ", window.window_height() - 1, 1);
-        }
         window.erase();
+        if (edit) {
+            statusbar.putstr("-- EDIT MODE --", 0, 0);
+        } else {
+            statusbar.putstr("               ", 0, 0);
+        }
+        statusbar.refresh();
         draw_task(window, task, selection);
         key = getch();
     } while (key != 'q' || (key == 'q' && edit));
