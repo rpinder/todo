@@ -252,7 +252,7 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
         statusbar.refresh();
         draw_task(window, task, selection);
         key = getch();
-    } while (key != 'q' || (key == 'q' && edit));
+    } while (key != 'q' || edit));
 }
 
 auto TaskManager::draw_task(Window &window, std::unique_ptr<Task> &task, int selection) -> void
