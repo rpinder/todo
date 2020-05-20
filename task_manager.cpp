@@ -159,7 +159,7 @@ auto TaskManager::draw_headings(std::unique_ptr<Window> &window) -> void
     int desc_width = static_cast<int>(ceil(2 * width / 3));
 
     std::ostringstream oss;
-    oss << std::setw(11) << std::left << "Date" << " | "
+    oss << std::setw(11) << std::left << " Date" << " | "
         << std::setw(title_width) << std::left << max_length("Title", title_width) << " | "
         << std::setw(desc_width) << std::left << max_length("Description", desc_width) << " | "
         << "  ";
