@@ -23,6 +23,7 @@ class TaskManager
     auto loop() -> void;
     auto draw_tasks(int current_item, int row_offset, std::unique_ptr<Window> &window) -> void;
     auto draw_statusbar(std::unique_ptr<Window> &window) -> void;
+    auto draw_headings(std::unique_ptr<Window> &window) -> void;
     auto num_completed() -> int;
     auto view_task(std::unique_ptr<Task> &task) -> void;
     auto draw_task(Window &window, std::unique_ptr<Task> &task, int selection) -> void;
