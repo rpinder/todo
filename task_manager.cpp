@@ -56,11 +56,11 @@ auto TaskManager::sort_tasks() -> void
 auto TaskManager::loop() -> void
 {
     auto mainwindow =
-        std::make_unique<Window>(Window::terminal_height() - 2, Window::terminal_width(), 1, 0);
+        std::make_unique<Window>(Window::terminal_height() - 3, Window::terminal_width(), 2, 0);
     auto statusbar =
         std::make_unique<Window>(1, Window::terminal_width(), Window::terminal_height() - 1, 0);
     auto headings =
-        std::make_unique<Window>(1, Window::terminal_width(), 0, 0);
+        std::make_unique<Window>(2, Window::terminal_width(), 0, 0);
 
     int key = 0;
     int current_item = 0;
@@ -108,7 +108,7 @@ auto TaskManager::loop() -> void
         case KEY_RESIZE:
             Window::stop_ncurses();
             Window::start_ncurses();
-            mainwindow->resize(Window::terminal_height() - 2, Window::terminal_width(), 1, 0);
+            mainwindow->resize(Window::terminal_height() - 3, Window::terminal_width(), 2, 0);
             mainwindow->refresh();
             if (current_item >= mainwindow->window_height())
                 current_item = mainwindow->window_height() - 1;
@@ -152,8 +152,6 @@ auto TaskManager::draw_tasks(int current_item, int row_offset, std::unique_ptr<W
 
 auto TaskManager::draw_headings(std::unique_ptr<Window> &window) -> void
 {
-    window->reverse(true);
-
     int width = window->window_width() - 22;
     int title_width = static_cast<int>(floor(width / 3));
     int desc_width = static_cast<int>(ceil(2 * width / 3));
@@ -165,8 +163,7 @@ auto TaskManager::draw_headings(std::unique_ptr<Window> &window) -> void
         << "  ";
 
     window->putstr(oss.str(), 0, 0);
-
-    window->reverse(false);
+    window->putstr(std::string(window->window_width(), '-'), 1, 0);
 }
 
 auto TaskManager::draw_statusbar(std::unique_ptr<Window> &window) -> void
