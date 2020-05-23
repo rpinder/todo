@@ -196,6 +196,7 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
 
     int key = 0;
     int selection = 1;
+    int dselection = 1;
     bool edit = false;
     do {
         switch (key) {
@@ -228,6 +229,15 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
                 }
             }
             break;
+        case KEY_LEFT: 
+            if (selection == 3 && dselection > 1) {
+                dselection--;
+            }
+            break;
+        case KEY_RIGHT:
+            if (selection == 3 && dselection < 3) {
+                dselection++;
+            }
         default:
             if ((isdigit(key) || isalpha(key) || ispunct(key) || key == ' ') && edit) {
                 switch (selection) {
