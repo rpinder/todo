@@ -21,6 +21,21 @@ auto Date::get_year() -> int
     return this->year;
 }
 
+auto Date::set_day(int day) -> void
+{
+    this->day = day;
+}
+
+auto Date::set_month(int month) -> void
+{
+    this->month = month;
+}
+
+auto Date::set_year(int year) -> void
+{
+    this->year = year;
+}
+
 auto Date::read() -> std::string
 {
     std::ostringstream ss;
