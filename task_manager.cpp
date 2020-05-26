@@ -163,7 +163,10 @@ auto TaskManager::draw_headings(std::unique_ptr<Window> &window) -> void
         << "  ";
 
     window->putstr(oss.str(), 0, 0);
-    window->putstr(std::string(window->window_width(), '-'), 1, 0);
+    std::ostringstream oss2;
+    oss2 << std::string(12, '-') << '+' << std::string(title_width + 2, '-') << '+' << std::string(desc_width + 2, '-')
+    << "+--";
+    window->putstr(oss2.str(),1,0);
 }
 
 auto TaskManager::draw_statusbar(std::unique_ptr<Window> &window) -> void
