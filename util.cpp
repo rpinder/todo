@@ -44,7 +44,7 @@ auto word_wrap(std::string str, int width) -> std::vector<std::string>
                     j = width;
                     break;
                 }
-            str.insert(j, "\n");
+            str.replace(j, 1, "\n");
             col = i - j;
         }
     }
