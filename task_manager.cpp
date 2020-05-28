@@ -282,10 +282,12 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
                                         date->set_year(date->get_year() + 1);
                                         break;
                                     case 2:
-                                        date->set_month(date->get_month() + 1);
+                                        if (date->get_month() < 12)
+                                            date->set_month(date->get_month() + 1);
                                         break;
                                     case 3:
-                                        date->set_day(date->get_day() + 1);
+                                        if (date->get_day() < 31)
+                                            date->set_day(date->get_day() + 1);
                                         break;
                                 }
                             }
@@ -295,13 +297,16 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
                                 auto& date = task->get_date();
                                 switch (dselection) {
                                     case 1:
-                                        date->set_year(date->get_year() - 1);
+                                        if (date->get_year() > 1)
+                                            date->set_year(date->get_year() - 1);
                                         break;
                                     case 2:
-                                        date->set_month(date->get_month() - 1);
+                                        if (date->get_month() > 1)
+                                            date->set_month(date->get_month() - 1);
                                         break;
                                     case 3:
-                                        date->set_day(date->get_day() - 1);
+                                        if (date->get_day() > 1)
+                                            date->set_day(date->get_day() - 1);
                                         break;
                                 }
                             }
