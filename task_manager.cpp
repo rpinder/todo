@@ -100,6 +100,9 @@ auto TaskManager::loop() -> void
                     mainwindow->erase();
                 }
                 break;
+        case 'a':
+            tasks.push_back(std::make_unique<Task>("Title","Description",std::make_unique<Date>(1970,1,1),false));
+            break;
             case 'o':
                 statusbar->erase();
                 statusbar->refresh();
