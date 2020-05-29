@@ -23,8 +23,8 @@ auto TaskManager::write_file(std::string name) -> void
     std::ofstream myfile;
     myfile.open(name);
     for (auto &t : tasks) {
-        myfile << t->get_date()->read() << "|" << t->get_title() << "|" << t->get_description()
-               << "|" << t->is_completed() << "\n";
+        myfile << t.get_date().read() << "|" << t.get_title() << "|" << t.get_description()
+               << "|" << t.is_completed() << "\n";
     }
     myfile.close();
 }
@@ -38,8 +38,9 @@ auto TaskManager::create_tasks() -> void
             date_int.push_back(std::stoi(s));
         }
 
-        auto day = std::make_unique<Date>(date_int[0], date_int[1], date_int[2]);
-        tasks.push_back(std::make_unique<Task>(r[1], r[2], std::move(day), std::stoi(r[3])));
+        Date day(date_int[0], date_int[1], date_int[2]);
+        Task task(r[1], r[2], day, std::stoi(r[3]));
+        tasks.push_back(task);
     }
 
     sort_tasks();
@@ -48,8 +49,8 @@ auto TaskManager::create_tasks() -> void
 auto TaskManager::sort_tasks() -> void
 {
     std::sort(tasks.begin(), tasks.end(),
-              [](const std::unique_ptr<Task> &a, const std::unique_ptr<Task> &b) {
-                  return compare_date(a->get_date(), b->get_date());
+              [](Task &a, Task &b) {
+                  return compare_date(a.get_date(), b.get_date());
               });
 }
 
@@ -84,7 +85,7 @@ auto TaskManager::loop() -> void
             break;
         case 'm':
             if (tasks.size() > 0)
-                tasks[current_item + row_offset]->toggle_completed();
+                tasks[current_item + row_offset].toggle_completed();
             break;
         case 'd':
             if (tasks.size() > 0) {
@@ -99,9 +100,12 @@ auto TaskManager::loop() -> void
             }
             break;
         case 'a':
-            tasks.push_back(std::make_unique<Task>("Title", "Description",
-                                                   std::make_unique<Date>(1970, 1, 1), false));
-            break;
+            {
+                Date day(1970, 1, 1);
+                Task task("Title", "Description", day, false);
+                tasks.push_back(task);
+                break;
+            }
         case 'o':
             statusbar.erase();
             statusbar.refresh();
@@ -139,12 +143,12 @@ auto TaskManager::draw_tasks(int current_item, int row_offset, Window &window)
     int desc_width = static_cast<int>(ceil(2 * width / 3));
     for (int y = 0; y < window.window_height() && y < static_cast<int>(tasks.size()); y++) {
         std::ostringstream oss;
-        oss << std::setw(11) << std::right << tasks[y + row_offset]->get_date()->read() << " | "
+        oss << std::setw(11) << std::right << tasks[y + row_offset].get_date().read() << " | "
             << std::setw(title_width) << std::left
-            << max_length(tasks[y + row_offset]->get_title(), title_width) << " | "
+            << max_length(tasks[y + row_offset].get_title(), title_width) << " | "
             << std::setw(desc_width) << std::left
-            << max_length(tasks[y + row_offset]->get_description(), desc_width) << " | "
-            << (tasks[y + row_offset]->is_completed() ? "/" : "x") << " ";
+            << max_length(tasks[y + row_offset].get_description(), desc_width) << " | "
+            << (tasks[y + row_offset].is_completed() ? "/" : "x") << " ";
         if (y == current_item)
             window.reverse(true);
         window.putstr(oss.str(), y, 0);
@@ -191,10 +195,10 @@ auto TaskManager::num_completed() -> int
 {
     return std::accumulate(
         tasks.begin(), tasks.end(), 0,
-        [](const int &total, const std::unique_ptr<Task> &t) { return total + t->is_completed(); });
+        [](const int &total, Task &t) { return total + t.is_completed(); });
 }
 
-auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
+auto TaskManager::view_task(Task &task) -> void
 {
     Window window(Window::terminal_height() - 1, Window::terminal_width(), 0, 0);
     Window statusbar(1, Window::terminal_width(), Window::terminal_height() - 1, 0);
@@ -220,14 +224,14 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
             if (edit) {
                 switch (selection) {
                 case 1:
-                    if (task->title.length() > 0) {
-                        task->title.pop_back();
+                    if (task.title.length() > 0) {
+                        task.title.pop_back();
                         window.erase();
                     }
                     break;
                 case 4:
-                    if (task->description.length() > 0) {
-                        task->description.pop_back();
+                    if (task.description.length() > 0) {
+                        task.description.pop_back();
                         window.erase();
                     }
                     break;
@@ -238,10 +242,10 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
             if ((isdigit(key) || isalpha(key) || ispunct(key) || key == ' ') && edit) {
                 switch (selection) {
                 case 1:
-                    task->title += static_cast<char>(key);
+                    task.title += static_cast<char>(key);
                     break;
                 case 4:
-                    task->description += static_cast<char>(key);
+                    task.description += static_cast<char>(key);
                     window.erase();
                     break;
                 }
@@ -262,43 +266,43 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
                     break;
                 case 'm':
                     if (!edit) {
-                        task->toggle_completed();
+                        task.toggle_completed();
                         window.erase();
                     }
                     break;
                 case 'w':
                     if (selection == 3) {
-                        auto &date = task->get_date();
+                        auto &date = task.get_date();
                         switch (dselection) {
                         case 1:
-                            date->set_year(date->get_year() + 1);
+                            date.set_year(date.get_year() + 1);
                             break;
                         case 2:
-                            if (date->get_month() < 12)
-                                date->set_month(date->get_month() + 1);
+                            if (date.get_month() < 12)
+                                date.set_month(date.get_month() + 1);
                             break;
                         case 3:
-                            if (date->get_day() < 31)
-                                date->set_day(date->get_day() + 1);
+                            if (date.get_day() < 31)
+                                date.set_day(date.get_day() + 1);
                             break;
                         }
                     }
                     break;
                 case 's':
                     if (selection == 3) {
-                        auto &date = task->get_date();
+                        auto &date = task.get_date();
                         switch (dselection) {
                         case 1:
-                            if (date->get_year() > 1)
-                                date->set_year(date->get_year() - 1);
+                            if (date.get_year() > 1)
+                                date.set_year(date.get_year() - 1);
                             break;
                         case 2:
-                            if (date->get_month() > 1)
-                                date->set_month(date->get_month() - 1);
+                            if (date.get_month() > 1)
+                                date.set_month(date.get_month() - 1);
                             break;
                         case 3:
-                            if (date->get_day() > 1)
-                                date->set_day(date->get_day() - 1);
+                            if (date.get_day() > 1)
+                                date.set_day(date.get_day() - 1);
                             break;
                         }
                     }
@@ -328,14 +332,14 @@ auto TaskManager::view_task(std::unique_ptr<Task> &task) -> void
     } while (key != 'q' || edit);
 }
 
-auto TaskManager::draw_task(Window &window, std::unique_ptr<Task> &task, int selection,
+auto TaskManager::draw_task(Window &window, Task &task, int selection,
                             int dselection) -> void
 {
     int y = 0;
     if (selection == 1)
         window.reverse(true);
-    if (task->get_title().size() > 0) {
-        for (auto l : word_wrap(task->get_title(), window.window_width() - 2)) {
+    if (task.get_title().size() > 0) {
+        for (auto l : word_wrap(task.get_title(), window.window_width() - 2)) {
             window.putstr(l, y, 1);
             y++;
         }
@@ -351,14 +355,14 @@ auto TaskManager::draw_task(Window &window, std::unique_ptr<Task> &task, int sel
 
     if (selection == 2)
         window.reverse(true);
-    window.putstr(task->is_completed() ? "Completed" : "Not Completed", y, 1);
+    window.putstr(task.is_completed() ? "Completed" : "Not Completed", y, 1);
     window.reverse(false);
 
     if (selection == 3) {
         if (dselection == 1)
             window.reverse(true);
         std::ostringstream out;
-        out << std::setfill(' ') << std::setw(4) << std::right << task->get_date()->get_year();
+        out << std::setfill(' ') << std::setw(4) << std::right << task.get_date().get_year();
         window.putstr(out.str(), ++++y, 1);
         window.reverse(false);
 
@@ -367,7 +371,7 @@ auto TaskManager::draw_task(Window &window, std::unique_ptr<Task> &task, int sel
         if (dselection == 2)
             window.reverse(true);
         std::ostringstream out2;
-        out2 << std::setfill('0') << std::setw(2) << std::right << task->get_date()->get_month();
+        out2 << std::setfill('0') << std::setw(2) << std::right << task.get_date().get_month();
         window.putstr(out2.str(), y, 6);
         window.reverse(false);
 
@@ -376,18 +380,18 @@ auto TaskManager::draw_task(Window &window, std::unique_ptr<Task> &task, int sel
         if (dselection == 3)
             window.reverse(true);
         std::ostringstream out3;
-        out3 << std::setfill('0') << std::setw(2) << std::right << task->get_date()->get_day();
+        out3 << std::setfill('0') << std::setw(2) << std::right << task.get_date().get_day();
         window.putstr(out3.str(), y, 9);
         window.reverse(false);
     } else {
-        window.putstr(task->get_date()->read(), ++++y, 1);
+        window.putstr(task.get_date().read(), ++++y, 1);
     }
     y += 2;
 
     if (selection == 4)
         window.reverse(true);
-    if (task->get_description().size() > 0) {
-        for (auto l : word_wrap(task->get_description(), window.window_width() - 2)) {
+    if (task.get_description().size() > 0) {
+        for (auto l : word_wrap(task.get_description(), window.window_width() - 2)) {
             window.putstr(l, y, 1);
             y++;
         }

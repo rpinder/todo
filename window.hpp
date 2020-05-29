@@ -10,7 +10,7 @@ extern "C" {
 class Window
 {
   private:
-    std::unique_ptr<NcursesWindow> win;
+    NcursesWindow win;
 
   public:
     Window(int height, int width, int y, int x);
@@ -30,7 +30,7 @@ class Window
     auto touch() -> void;
     auto erase() -> void;
 
-    auto get() -> std::unique_ptr<NcursesWindow> &;
+    auto get() -> NcursesWindow &;
 };
 
 #endif

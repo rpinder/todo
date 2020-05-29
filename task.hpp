@@ -10,10 +10,10 @@ class Task
 {
   private:
     bool completed;
-    std::unique_ptr<Date> day;
+    Date day;
 
   public:
-    Task(std::string title, std::string description, std::unique_ptr<Date> day, bool completed);
+    Task(std::string title, std::string description, Date day, bool completed);
 
     std::string title;
     std::string description;
@@ -22,7 +22,7 @@ class Task
     auto is_completed() -> bool;
     auto make_completed() -> void;
     auto toggle_completed() -> void;
-    auto get_date() -> std::unique_ptr<Date> &;
+    auto get_date() -> Date &;
 };
 
 #endif

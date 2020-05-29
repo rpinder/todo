@@ -25,11 +25,11 @@ class TaskManager
     auto draw_statusbar(Window &window) -> void;
     auto draw_headings(Window &window) -> void;
     auto num_completed() -> int;
-    auto view_task(std::unique_ptr<Task> &task) -> void;
-    auto draw_task(Window &window, std::unique_ptr<Task> &task, int selection, int dselection) -> void;
+    auto view_task(Task &task) -> void;
+    auto draw_task(Window &window, Task &task, int selection, int dselection) -> void;
 
   private:
-    std::vector<std::unique_ptr<Task>> tasks;
+    std::vector<Task> tasks;
     std::vector<std::vector<std::string>> records;
 
     auto sort_tasks() -> void;

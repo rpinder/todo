@@ -20,4 +20,4 @@ class Date
     int day;
 };
 
-auto compare_date(const std::unique_ptr<Date> &a, const std::unique_ptr<Date> &b) -> bool;
+auto compare_date(Date &a, Date &b) -> bool;

@@ -1,7 +1,7 @@
 #include "task.hpp"
 
-Task::Task(std::string title, std::string description, std::unique_ptr<Date> day, bool completed)
-    : day(std::move(day))
+Task::Task(std::string title, std::string description, Date day, bool completed)
+    : day(day)
 {
     this->description = description;
     this->completed = completed;
@@ -33,7 +33,7 @@ auto Task::toggle_completed() -> void
     this->completed = !this->completed;
 }
 
-auto Task::get_date() -> std::unique_ptr<Date> &
+auto Task::get_date() -> Date &
 {
     return day;
 }
