@@ -55,11 +55,10 @@ auto TaskManager::sort_tasks() -> void
 
 auto TaskManager::loop() -> void
 {
-    auto mainwindow =
-        std::make_unique<Window>(Window::terminal_height() - 3, Window::terminal_width(), 2, 0);
-    auto statusbar =
-        std::make_unique<Window>(1, Window::terminal_width(), Window::terminal_height() - 1, 0);
-    auto headings = std::make_unique<Window>(2, Window::terminal_width(), 0, 0);
+    Window mainwindow(Window::terminal_height() - 3, Window::terminal_width(), 2, 0);
+    Window statusbar(1, Window::terminal_width(), Window::terminal_height() - 1, 0);
+    Window headings(2, Window::terminal_width(), 0, 0);
+   
 
     int key = 0;
     int current_item = 0;
@@ -67,9 +66,9 @@ auto TaskManager::loop() -> void
     do {
         switch (key) {
         case 'j':
-            if (current_item < mainwindow->window_height() &&
+            if (current_item < mainwindow.window_height() &&
                 current_item + row_offset < static_cast<int>(tasks.size()) - 1) {
-                if (current_item == mainwindow->window_height() - 1)
+                if (current_item == mainwindow.window_height() - 1)
                     row_offset++;
                 else
                     current_item++;
@@ -96,7 +95,7 @@ auto TaskManager::loop() -> void
                     if (row_offset > 0)
                         row_offset--;
                 }
-                mainwindow->erase();
+                mainwindow.erase();
             }
             break;
         case 'a':
@@ -104,41 +103,41 @@ auto TaskManager::loop() -> void
                                                    std::make_unique<Date>(1970, 1, 1), false));
             break;
         case 'o':
-            statusbar->erase();
-            statusbar->refresh();
+            statusbar.erase();
+            statusbar.refresh();
             view_task(tasks[current_item + row_offset]);
             break;
         case KEY_RESIZE:
             Window::stop_ncurses();
             Window::start_ncurses();
-            mainwindow->resize(Window::terminal_height() - 3, Window::terminal_width(), 2, 0);
-            mainwindow->refresh();
-            if (current_item >= mainwindow->window_height())
-                current_item = mainwindow->window_height() - 1;
+            mainwindow.resize(Window::terminal_height() - 3, Window::terminal_width(), 2, 0);
+            mainwindow.refresh();
+            if (current_item >= mainwindow.window_height())
+                current_item = mainwindow.window_height() - 1;
 
-            statusbar->resize(1, Window::terminal_width(), Window::terminal_height() - 1, 0);
-            statusbar->refresh();
+            statusbar.resize(1, Window::terminal_width(), Window::terminal_height() - 1, 0);
+            statusbar.refresh();
             break;
         default:
             break;
         }
         draw_tasks(current_item, row_offset, mainwindow);
-        mainwindow->refresh();
+        mainwindow.refresh();
         draw_statusbar(statusbar);
-        statusbar->refresh();
+        statusbar.refresh();
         draw_headings(headings);
-        headings->refresh();
+        headings.refresh();
         key = getch();
     } while (key != 'q');
 }
 
-auto TaskManager::draw_tasks(int current_item, int row_offset, std::unique_ptr<Window> &window)
+auto TaskManager::draw_tasks(int current_item, int row_offset, Window &window)
     -> void
 {
-    int width = window->window_width() - 22;
+    int width = window.window_width() - 22;
     int title_width = static_cast<int>(floor(width / 3));
     int desc_width = static_cast<int>(ceil(2 * width / 3));
-    for (int y = 0; y < window->window_height() && y < static_cast<int>(tasks.size()); y++) {
+    for (int y = 0; y < window.window_height() && y < static_cast<int>(tasks.size()); y++) {
         std::ostringstream oss;
         oss << std::setw(11) << std::right << tasks[y + row_offset]->get_date()->read() << " | "
             << std::setw(title_width) << std::left
@@ -147,15 +146,15 @@ auto TaskManager::draw_tasks(int current_item, int row_offset, std::unique_ptr<W
             << max_length(tasks[y + row_offset]->get_description(), desc_width) << " | "
             << (tasks[y + row_offset]->is_completed() ? "/" : "x") << " ";
         if (y == current_item)
-            window->reverse(true);
-        window->putstr(oss.str(), y, 0);
-        window->reverse(false);
+            window.reverse(true);
+        window.putstr(oss.str(), y, 0);
+        window.reverse(false);
     }
 }
 
-auto TaskManager::draw_headings(std::unique_ptr<Window> &window) -> void
+auto TaskManager::draw_headings(Window &window) -> void
 {
-    int width = window->window_width() - 22;
+    int width = window.window_width() - 22;
     int title_width = static_cast<int>(floor(width / 3));
     int desc_width = static_cast<int>(ceil(2 * width / 3));
 
@@ -165,27 +164,27 @@ auto TaskManager::draw_headings(std::unique_ptr<Window> &window) -> void
         << std::setw(desc_width) << std::left << max_length("Description", desc_width) << " | "
         << "  ";
 
-    window->putstr(oss.str(), 0, 0);
+    window.putstr(oss.str(), 0, 0);
     std::ostringstream oss2;
     oss2 << std::string(12, '-') << '+' << std::string(title_width + 2, '-') << '+'
          << std::string(desc_width + 2, '-') << "+--";
-    window->putstr(oss2.str(), 1, 0);
+    window.putstr(oss2.str(), 1, 0);
 }
 
-auto TaskManager::draw_statusbar(std::unique_ptr<Window> &window) -> void
+auto TaskManager::draw_statusbar(Window &window) -> void
 {
-    window->reverse(true);
+    window.reverse(true);
     std::ostringstream tasks_completed;
     tasks_completed << " Tasks Completed: " << num_completed() << "/" << tasks.size();
 
     std::ostringstream oss;
     oss << tasks_completed.str()
-        << std::setw(window->window_width() - static_cast<int>(tasks_completed.str().size()) - 2)
+        << std::setw(window.window_width() - static_cast<int>(tasks_completed.str().size()) - 2)
         << std::right << static_cast<int>(100 * num_completed() / static_cast<double>(tasks.size()))
         << "% ";
-    window->putstr(oss.str(), 0, 0);
+    window.putstr(oss.str(), 0, 0);
 
-    window->reverse(false);
+    window.reverse(false);
 }
 
 auto TaskManager::num_completed() -> int
