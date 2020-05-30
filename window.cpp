@@ -13,12 +13,17 @@ Window::Window(std::function<int(int)> height, std::function<int(int)> width,
                 width(terminal_width()),
                 y(terminal_height()),
                 x(terminal_width())))
-    {}
+{
+    this->height = height;
+    this->width = width;
+    this->y = y;
+    this->x = x;
+}
 
 
 auto Window::resize() -> void
 {
-    this->win = NcursesWindow(
+    NcursesWindow win(
             height(terminal_height()),
             width(terminal_width()),
             y(terminal_height()),
