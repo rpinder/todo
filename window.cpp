@@ -6,13 +6,23 @@ extern "C" {
 #include <ncurses.h>
 }
 
-Window::Window(int height, int width, int y, int x)
-    : win(NcursesWindow(height, width, y, x))
-{}
+Window::Window(std::function<int(int)> height, std::function<int(int)> width,
+        std::function<int(int)> y, std::function<int(int)> x)
+    :win(NcursesWindow(
+                height(terminal_height()),
+                width(terminal_width()),
+                y(terminal_height()),
+                x(terminal_width())))
+    {}
 
-auto Window::resize(int height, int width, int y, int x) -> void
+
+auto Window::resize() -> void
 {
-    this->win = NcursesWindow(height, width, y, x);
+    this->win = NcursesWindow(
+            height(terminal_height()),
+            width(terminal_width()),
+            y(terminal_height()),
+            x(terminal_width()));
 }
 
 auto Window::refresh() -> void

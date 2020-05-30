@@ -56,9 +56,21 @@ auto TaskManager::sort_tasks() -> void
 
 auto TaskManager::loop() -> void
 {
-    Window mainwindow(Window::terminal_height() - 3, Window::terminal_width(), 2, 0);
-    Window statusbar(1, Window::terminal_width(), Window::terminal_height() - 1, 0);
-    Window headings(2, Window::terminal_width(), 0, 0);
+    Window mainwindow(
+            [](int x){return x -3;},
+            [](int x){return x;},
+            [](int x){(void)x;return 2;},
+            [](int x){(void)x;return 0;});
+    Window statusbar(
+            [](int x){(void)x;return 1;},
+            [](int x){return x;},
+            [](int x){return x - 1;},
+            [](int x){(void)x;return 0;});
+    Window headings(
+            [](int x){(void)x;return 2;},
+            [](int x){return x;},
+            [](int x){(void)x;return 0;},
+            [](int x){(void)x;return 0;});
    
 
     int key = 0;
@@ -114,12 +126,12 @@ auto TaskManager::loop() -> void
         case KEY_RESIZE:
             Window::stop_ncurses();
             Window::start_ncurses();
-            mainwindow.resize(Window::terminal_height() - 3, Window::terminal_width(), 2, 0);
+            mainwindow.resize();
             mainwindow.refresh();
             if (current_item >= mainwindow.window_height())
                 current_item = mainwindow.window_height() - 1;
 
-            statusbar.resize(1, Window::terminal_width(), Window::terminal_height() - 1, 0);
+            statusbar.resize();
             statusbar.refresh();
             break;
         default:
@@ -200,8 +212,16 @@ auto TaskManager::num_completed() -> int
 
 auto TaskManager::view_task(Task &task) -> void
 {
-    Window window(Window::terminal_height() - 1, Window::terminal_width(), 0, 0);
-    Window statusbar(1, Window::terminal_width(), Window::terminal_height() - 1, 0);
+    Window window(
+            [](int x){return x - 1;},
+            [](int x){return x;},
+            [](int x){(void)x;return 0;},
+            [](int x){(void)x;return 0;});
+    Window statusbar(
+            [](int x){(void)x;return 1;},
+            [](int x){return x;},
+            [](int x){return x-1;},
+            [](int x){(void)x;return 0;});
 
     int key = 0;
     int selection = 1;
@@ -212,9 +232,9 @@ auto TaskManager::view_task(Task &task) -> void
         case KEY_RESIZE:
             Window::stop_ncurses();
             Window::start_ncurses();
-            window.resize(Window::terminal_height() - 1, Window::terminal_width(), 0, 0);
+            window.resize();
             window.refresh();
-            statusbar.resize(1, Window::terminal_width(), Window::terminal_height() - 1, 0);
+            statusbar.resize();
             statusbar.refresh();
             break;
         case 27:
