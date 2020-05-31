@@ -1,6 +1,6 @@
 CPPFLAGS=-Wall -pedantic -Wextra -Wconversion -std=c++17
 
-todo: task.o window.o ncurses_window.o date.o util.o task_manager.o
+todo: task.o window.o ncurses_window.o date.o util.o task_manager.o main.cpp
 	g++ $(CPPFLAGS) -lncurses -o todo main.cpp task.o window.o ncurses_window.o date.o util.o task_manager.o
 
 task.o: task.cpp task.hpp date.hpp
