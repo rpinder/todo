@@ -90,3 +90,18 @@ auto Window::erase() -> void
 {
     werase(win->get());
 }
+
+Window::NcursesWindow::NcursesWindow(int height, int width, int y, int x)
+{
+    this->win = newwin(height, width, y, x);
+}
+
+Window::NcursesWindow::~NcursesWindow()
+{
+    delwin(this->win);
+}
+
+auto Window::NcursesWindow::get() -> WINDOW *
+{
+    return win;
+}

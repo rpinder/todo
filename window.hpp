@@ -1,7 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "ncurses_window.hpp"
+//#include "ncurses_window.hpp"
 #include <memory>
 #include <functional>
 extern "C" {
@@ -11,6 +11,17 @@ extern "C" {
 class Window
 {
   private:
+      class NcursesWindow
+      {
+          private:
+              WINDOW *win;
+
+          public:
+              NcursesWindow(int height, int width, int y, int x);
+              ~NcursesWindow();
+              WINDOW *get();
+      };
+
       std::unique_ptr<NcursesWindow> win;
       std::function<int(int)> height;
       std::function<int(int)> width;
