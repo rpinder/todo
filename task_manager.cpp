@@ -122,6 +122,7 @@ auto TaskManager::loop() -> void
             statusbar.erase();
             statusbar.refresh();
             view_task(tasks[current_item + row_offset]);
+            sort_tasks();
             break;
         case KEY_RESIZE:
             Window::stop_ncurses();
