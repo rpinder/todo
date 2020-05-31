@@ -123,6 +123,7 @@ auto TaskManager::loop() -> void
             statusbar.refresh();
             view_task(tasks[current_item + row_offset]);
             sort_tasks();
+            mainwindow.touch();
             break;
         case KEY_RESIZE:
             Window::stop_ncurses();
