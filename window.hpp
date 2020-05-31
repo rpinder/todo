@@ -11,11 +11,11 @@ extern "C" {
 class Window
 {
   private:
-    NcursesWindow win;
-    std::function<int(int)> height;
-    std::function<int(int)> width;
-    std::function<int(int)> y;
-    std::function<int(int)> x;
+      std::unique_ptr<NcursesWindow> win;
+      std::function<int(int)> height;
+      std::function<int(int)> width;
+      std::function<int(int)> y;
+      std::function<int(int)> x;
 
   public:
     Window(std::function<int(int)> height, std::function<int(int)> width,
@@ -35,8 +35,6 @@ class Window
     auto reverse(bool b) -> void;
     auto touch() -> void;
     auto erase() -> void;
-
-    auto get() -> NcursesWindow &;
 };
 
 #endif

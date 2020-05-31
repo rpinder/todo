@@ -8,7 +8,7 @@ extern "C" {
 
 Window::Window(std::function<int(int)> height, std::function<int(int)> width,
         std::function<int(int)> y, std::function<int(int)> x)
-    :win(NcursesWindow(
+    :win(std::make_unique<NcursesWindow>(
                 height(terminal_height()),
                 width(terminal_width()),
                 y(terminal_height()),
@@ -23,21 +23,21 @@ Window::Window(std::function<int(int)> height, std::function<int(int)> width,
 
 auto Window::resize() -> void
 {
-    NcursesWindow win(
-            height(terminal_height()),
-            width(terminal_width()),
-            y(terminal_height()),
-            x(terminal_width()));
+    this->win = std::make_unique<NcursesWindow>(
+            height(Window::terminal_height()),
+            width(Window::terminal_width()),
+            y(Window::terminal_height()),
+            x(Window::terminal_width()));
 }
 
 auto Window::refresh() -> void
 {
-    wrefresh(this->win.get());
+    wrefresh(this->win->get());
 }
 
 auto Window::putstr(std::string text, int y, int x) -> void
 {
-    mvwaddstr(this->win.get(), y, x, text.c_str());
+    mvwaddstr(this->win->get(), y, x, text.c_str());
 }
 
 auto Window::start_ncurses() -> void
@@ -65,33 +65,28 @@ auto Window::terminal_width() -> int
 
 auto Window::window_height() -> int
 {
-    return getmaxy(this->win.get());
+    return getmaxy(this->win->get());
 }
 
 auto Window::window_width() -> int
 {
-    return getmaxx(this->win.get());
+    return getmaxx(this->win->get());
 }
 
 auto Window::reverse(bool b) -> void
 {
     if (b)
-        wattron(win.get(), A_REVERSE);
+        wattron(win->get(), A_REVERSE);
     else
-        wattroff(win.get(), A_REVERSE);
-}
-
-auto Window::get() -> NcursesWindow &
-{
-    return win;
+        wattroff(win->get(), A_REVERSE);
 }
 
 auto Window::touch() -> void
 {
-    touchwin(win.get());
+    touchwin(win->get());
 }
 
 auto Window::erase() -> void
 {
-    werase(win.get());
+    werase(win->get());
 }

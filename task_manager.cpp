@@ -128,11 +128,11 @@ auto TaskManager::loop() -> void
             Window::start_ncurses();
             mainwindow.resize();
             mainwindow.refresh();
+            statusbar.resize();
+            statusbar.refresh();
             if (current_item >= mainwindow.window_height())
                 current_item = mainwindow.window_height() - 1;
 
-            statusbar.resize();
-            statusbar.refresh();
             break;
         default:
             break;
