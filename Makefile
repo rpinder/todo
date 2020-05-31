@@ -20,3 +20,6 @@ util.o: util.cpp util.hpp
 
 task_manager.o: task_manager.cpp task_manager.hpp util.hpp window.hpp
 	g++ $(CPPFLAGS) -c task_manager.cpp
+
+install: todo
+	cp $< /usr/local/bin/todo
